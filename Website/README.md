@@ -1,11 +1,22 @@
 # Running the express server:
 
-`PORT=12345 node .`
+## Production
 
-# Running react
+In Website folder
+```sh
+cd client
+npm run build
+cd ..
+PORT=6969 node .
+```
 
-`REACT_APP_HOST_API=http://localhost:12345/ npm run start`
 
-If the API doesnt work
+## Dev
 
-`ssh -p 22222 -N -L localhost:12345:localhost:12345 vthacks@movementgaming.online`
+In Website folder
+`PORT=6969 IGNORE_AUTH=1 node .`
+In Website/client folder
+`REACT_APP_HOST_API=http://localhost:6969/ npm run start`
+
+In Another window *ONLY IF IT DOESNT WORK RIGHT WITHOUT THIS*
+`ssh -p 22222 -N -L localhost:6969:localhost:6969 vthacks@movementgaming.online`
