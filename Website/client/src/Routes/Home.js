@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { UserContext } from '../Contexts/User';
+
 class Home extends React.Component {
   
   constructor(props) {
@@ -9,9 +11,12 @@ class Home extends React.Component {
 
   render() {
     return (
-            <p>Let the trading begin!</p>
+            <p>Let the trading begin, {this.context.User.nickname}</p>
     );
   }
 }
+
+
+Home.contextType = UserContext;
 
 export default Home;
