@@ -30,7 +30,7 @@ class App extends React.Component {
       return (
         <UserContext.Provider value={this.state.Context}>
           <div className="d-flex flex-column" style={{overflow:"hidden",minHeight:"100vh"}}>
-            <div className={"text-light pt-4 flex-grow-1 d-flex flex-column"} style={{height:'100%',backgroundImage:'radial-gradient(at top,rgb(26,27,32),rgb(13,13.5,16))'}}>
+            <div className={"text-light flex-grow-1 d-flex flex-column"} style={{height:'100%',backgroundImage:'radial-gradient(at top,rgb(26,27,32),rgb(13,13.5,16))'}}>
               <Routes>
 
                 <Route path="/" element = {<Home/>}/>

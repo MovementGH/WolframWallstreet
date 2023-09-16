@@ -1,22 +1,25 @@
 import React from 'react'
 
-import { UserContext } from '../Contexts/User';
+import NavBar from '../Components/NavBar';
 
 class Home extends React.Component {
   
   constructor(props) {
     super(props);
-    this.state = {};
   }
 
   render() {
     return (
-            <p>Let the trading begin, {this.context.User.nickname}</p>
+      <div>
+        <NavBar/>
+        <div>
+          <h1>Available Models:</h1>
+        </div>
+      </div>
     );
   }
 }
 
 
-Home.contextType = UserContext;
 
 export default Home;
