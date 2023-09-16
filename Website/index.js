@@ -22,7 +22,7 @@ function Authenticate(Request, Response, Next) {
     if(process.env.IGNORE_AUTH=='1')
         Request.oidc={user:{nickname:'Dev User',sid:'0'}};
     else if(!Request.oidc.isAuthenticated())
-        Response.redirect('/login');
+        Response.sendStatus(401);
     Next();
 }
 

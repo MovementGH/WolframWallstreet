@@ -13,17 +13,20 @@ class App extends React.Component {
   
   constructor(props) {
     super(props);
-    this.state={Context:1};
+    this.state={};
   }
 
   componentDidMount() {
     Request.CacheableRequest('GET','user').then(Result=>{
       this.setState({Context:{User:Result.Body}});
-    })
+    }).catch(Result=>{
+      if(Result.Status==401)
+        window.location="/login";
+    });
   }
 
   render() {
-    if(this.state.Context) {
+    if(this.state?.Context?.User) {
       return (
         <UserContext.Provider value={this.state.Context}>
           <div className="d-flex flex-column" style={{overflow:"hidden",minHeight:"100vh"}}>
