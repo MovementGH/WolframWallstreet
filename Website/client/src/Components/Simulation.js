@@ -95,13 +95,13 @@ class Simulation extends React.Component {
             backgroundColor: 'rgba(53, 235, 162, 1)',
             yAxisID: 'y1',
           },
-          {
-            label: 'Equity Percent',
-            data: this.state.Statistics.EquityPercent.map(Datum => 100*Datum.toFixed(2)),
-            borderColor: 'rgb(53, 235, 162)',
-            backgroundColor: 'rgba(53, 235, 162, 1)',
-            yAxisID: 'y',
-          },
+          // {
+          //   label: 'Equity Percent',
+          //   data: this.state.Statistics.EquityPercent.map(Datum => 100*Datum.toFixed(2)),
+          //   borderColor: 'rgb(53, 235, 162)',
+          //   backgroundColor: 'rgba(53, 235, 162, 1)',
+          //   yAxisID: 'y',
+          // },
         ]}} />
       </div>
     }
