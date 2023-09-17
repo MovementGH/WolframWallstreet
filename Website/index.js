@@ -66,7 +66,7 @@ async function RunModel(Request,Response) {
             };
         });
 
-        let Stats = Simulate(Rows, 10000, 0, 49500, 24500);
+        let Stats = Simulate(Rows, 1000, 0, 49500, 24500);
         console.log(Stats);
         Stats.SharePriceRaw = Rows.map(Row => Row.Actual);
         Stats.DatesRaw = Rows.map(Row=>Row.Date);
@@ -74,7 +74,7 @@ async function RunModel(Request,Response) {
     });
 
 }
-
+ 
 
 
 const ObjExpressServer=new LibExpress();
