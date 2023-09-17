@@ -20,7 +20,7 @@ class App extends React.Component {
     Request.CacheableRequest('GET','user').then(Result=>{
       this.setState({Context:{User:Result.Body}});
     }).catch(Result=>{
-      if(Result.Status==401)
+      if(Result.Status === 401)
         window.location="/login";
     });
   }

@@ -6,16 +6,12 @@ import Button from 'react-bootstrap/Button';
 import './NavBar.css';
 
 class Home extends React.Component {
-  
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (
         <div className="d-flex justify-content-between align-items-center tape-bg" style={{height: '5em',borderBottom: '1px solid white'}}>
             <div className="d-flex align-items-center tape-cover-left">
-                <img className="mx-2" src="/logo.png" style={{height: '3.5em'}}/>
+                <img alt='logo' className="mx-2" src="/logo.png" style={{height: '3.5em'}}/>
                 <p className="m-0" style={{fontSize: '2em'}}>WolframWallstreet</p>
             </div>
             <div className="d-flex align-items-center tape-cover-right">
