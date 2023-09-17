@@ -1,4 +1,4 @@
-function Simulate(Data, StartingBalance, StartingInvestment, Sensitivity, MaxTrade) {
+function Simulate(Data, StartingBalance, StartingInvestment, SensitivityBuy, SensitivitySell, MaxTrade) {
     let Balance = StartingBalance;
     let Shares = 0;
     let Stats = { TradingVolume: [], NetWorth: [], EquityPercent: []};
@@ -9,12 +9,6 @@ function Simulate(Data, StartingBalance, StartingInvestment, Sensitivity, MaxTra
         //We can't buy more than we can afford
         if(Amount > 0 && Amount * Price > Balance)
             Amount = Math.floor(Balance / Price);
-
-        if(Amount * Price > MaxTrade)
-            Amount = MaxTrade / Price;
-        if(Amount * Price < -MaxTrade)
-            Amount = -MaxTrade / Price;
-
 
         Shares += Amount;
         Balance -= Price * Amount;
@@ -28,9 +22,8 @@ function Simulate(Data, StartingBalance, StartingInvestment, Sensitivity, MaxTra
     for(let Day=0; Day<Data.length-1; Day++) {
         //Trade the stonks
         let PredictedDelta = Data[Day+1].Predicted - Data[Day].Actual;
-        PredictedDelta*=-1;
         let PredictedPercent = PredictedDelta/Data[Day].Actual*100;
-        Stats.TradingVolume[Day] = Trade(PredictedPercent*Sensitivity/Data[Day].Actual, Data[Day].Actual);
+        Stats.TradingVolume[Day] = Trade(PredictedPercent*(PredictedPercent>0?SensitivityBuy:SensitivitySell)/Data[Day].Actual, Data[Day].Actual);
         Stats.NetWorth[Day] = Balance + Shares * Data[Day].Actual;
         Stats.EquityPercent[Day] = 1 - Balance / Stats.NetWorth[Day];
     }
@@ -48,19 +41,3 @@ function Simulate(Data, StartingBalance, StartingInvestment, Sensitivity, MaxTra
 }
 
 module.exports = Simulate;
-
-// const LibFileSys=require('fs');
-// LibFileSys.readFile('../Model/output/YELP.csv', (Error, Data) =>{
-//     let Rows = Data.toString().split('\n').slice(1,-1).map(Row=>{
-//         let Cells = Row.split(',');
-//         return {
-//             Date: Cells[0].split(' ')[0],
-//             Actual: +Cells[1],
-//             Predicted: +Cells[3]
-//         };
-//     });
-  
-//     let Stats = Simulate(Rows, 10000, .5, 2500, 10000);
-//     Stats.SharePriceRaw = Rows.map(Row => Row.Actual);
-//     Stats.DatesRaw = Rows.map(Row=>Row.Date);
-//   });

@@ -49,8 +49,11 @@ function GetUser(Request,Response) {
     Response.json(Request?.oidc?.user || {});
 }
 
-function RunModel(Request,Response) {
+async function RunModel(Request,Response) {
     //Simulate a model
+    let Models = await Bash('ls ../Model/output');
+    if(!Models.match(Request.params.model+'\\.csv'))
+        await Bash('cd ../Model;venv/bin/python ml_engine.py '+Request.params.model+' 1950-1-1 2020-1-1')
 
     //Get the data
     LibFileSys.readFile('../Model/output/'+Request.params.model+'.csv', (Error, Data) =>{
@@ -63,7 +66,7 @@ function RunModel(Request,Response) {
             };
         });
 
-        let Stats = Simulate(Rows, 10000, .5, 2500, 100000);
+        let Stats = Simulate(Rows, 10000, 0, 49500, 24500);
         console.log(Stats);
         Stats.SharePriceRaw = Rows.map(Row => Row.Actual);
         Stats.DatesRaw = Rows.map(Row=>Row.Date);
