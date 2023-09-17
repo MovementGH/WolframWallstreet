@@ -27,12 +27,6 @@ if len(sys.argv) != 4:
 
 n_cores = multiprocessing.cpu_count()
 
-# Check if GPU is available
-# if tf.test.gpu_device_name():
-#     print('GPU found')
-# else:
-#     print("No GPU found, using CPU")
-
 yf.pdr_override()
 np.random.seed(5805)
 
@@ -121,35 +115,13 @@ def predict_close(model, X_train, y_train_close, X_test):
     # Return the predicted close values
     return ml_predictions_close
 
-# stocks = sys.argv[1]
-# start_date = sys.argv[2]
-# end_date = sys.argv[3]
-
-# try:
-#     stock_data = yf.download(stocks, start=start_date, end=end_date)
-# except Exception as e:
-#     print(f"Failed to fetch data for {stocks}: {e}")
-#     sys.exit(1)
-
-# # Check if the DataFrame is empty
-# if stock_data.empty:
-#     print(f"No data available for {stocks} in the specified date range.")
-#     sys.exit(1)
-
 if __name__ == "__main__":
-    # Define the stocks to analyze
-    # stocks = ['AAPL', 'BP','DIS','FRD','GME','HP','IBM','MSFT','TSLA','YELP']
     stocks = [ sys.argv[1] ]
-    # print("Stock Symbol:", stocks)
-    # print("Start Date:", start_date)
-    # print("End Date:", end_date)
-    # stocks=input("Enter a stock")
 
     # print("Define the date range for data retrieval")
     start_date = sys.argv[2]
     # start_date = input("Enter start date (YYYY-MM-DD): ")
     end_date = sys.argv[3]
-    print(stocks, start_date, end_date)
     # end_date = input("Enter end date (YYYY-MM-DD): ")
 
     # with pd.ExcelWriter("stock_predictions.xlsx", engine='xlsxwriter') as writer:
@@ -259,31 +231,3 @@ if __name__ == "__main__":
         results_df = pd.concat([results_df, stock_results], ignore_index=True)
         stock_data = results_df[results_df['Stock'] == stock_symbol]
         stock_data.to_csv(f"output/{stock_symbol}.csv", index=False)
-
-
-        # while True:
-        #     input_date = input(f"Enter a date for {stock_symbol} (YYYY-MM-DD) to predict the close price (or 'q' to quit): ")
-        #     if input_date.lower() == 'q':
-        #         break
-            
-        #     try:
-        #         # Convert the input date to a datetime object
-        #         input_date = pd.to_datetime(input_date)
-                
-        #         # Prepare the input data for prediction
-        #         input_data = df[df['Date'] == input_date][features]
-        #         input_data = scaler.transform(input_data)
-                
-        #         # Predict using the trained models
-        #         nn_prediction = model.predict(input_data)[0][0]
-        #         lr_prediction = lr_model.predict(input_data)[0]
-
-        #         print(f"Predicted Close Price (Neural Network): {nn_prediction:.2f}")
-        #         print(f"Predicted Close Price (Linear Regression): {lr_prediction:.2f}")
-        #     except ValueError:
-        #         print("Invalid date format. Please use 'YYYY-MM-DD' format.")
-        #     except KeyError:
-        #         print("Date not found in the dataset. Please enter a date within the available range.")
-        # print(f"Finished predictions for {stock_symbol}.")
-        
-
