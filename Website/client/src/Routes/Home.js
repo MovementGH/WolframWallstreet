@@ -3,7 +3,6 @@ import Button from 'react-bootstrap/Button';
 import NavBar from '../Components/NavBar';
 import Simulation from '../Components/Simulation';
 
-
 class Home extends React.Component {
 
   textValue = '';
@@ -27,7 +26,7 @@ class Home extends React.Component {
       <div>
         <NavBar/>
         <div className="text-center py-3">
-          <h1>Proof of Concen: Simulation</h1>
+          <h1>Proof of Concept: Simulation</h1>
           <p style={{margin: 'auto',width:'60%'}}>
             Simply input a stock ticker, and our neural network will train on that stock's data up to the end of 2014. It will subsequently forecast the stock's values from 2015 to 2019. An algorithm will then execute daily stock buying and selling decisions based on these predictions. The resulting transaction data will be presented in a graph below for your exploration and enjoyment. Give it a try!
           </p>

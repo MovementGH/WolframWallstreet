@@ -1,5 +1,6 @@
 import React from 'react'
 import Request from '../Tools/Request';
+import './Simulation.css'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -66,7 +67,7 @@ class Simulation extends React.Component {
 
     render() {
       if(!this.state.Statistics)
-        return <></>;
+        return <span className="loader"></span>;
       return <div className="bg-dark p-4 text-center" style={{width:'60%', border: '1px solid white'}}>
         <h1>Simulation Results:</h1>
         <p>Profit from holding: ${this.state.Statistics.HoldingProfit.toFixed(2)}</p>
