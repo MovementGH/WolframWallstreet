@@ -13,18 +13,17 @@ from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
 from sklearn.ensemble import RandomForestRegressor,GradientBoostingRegressor
 import multiprocessing
 import tensorflow as tf
-# from tensorflow.keras import Sequential
-# from tensorflow.keras.layers import Dense
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
 import multiprocessing
 import joblib
 import os
 from pathlib import Path
 import sys
 
-# Check if there are enough command-line arguments
-# if len(sys.argv) != 4:
-#     print("Usage: python your_script.py stock_symbol start_date end_date")
-#     sys.exit(1)
+if len(sys.argv) != 4:
+    print("Usage: python your_script.py stock_symbol start_date end_date")
+    sys.exit(1)
 
 n_cores = multiprocessing.cpu_count()
 
@@ -139,15 +138,19 @@ def predict_close(model, X_train, y_train_close, X_test):
 
 if __name__ == "__main__":
     # Define the stocks to analyze
-    stocks = ['HP']
+    # stocks = ['AAPL', 'BP','DIS','FRD','GME','HP','IBM','MSFT','TSLA','YELP']
+    stocks = [ sys.argv[1] ]
     # print("Stock Symbol:", stocks)
     # print("Start Date:", start_date)
     # print("End Date:", end_date)
     # stocks=input("Enter a stock")
 
     # print("Define the date range for data retrieval")
-    start_date = input("Enter start date (YYYY-MM-DD): ")
-    end_date = input("Enter end date (YYYY-MM-DD): ")
+    start_date = sys.argv[2]
+    # start_date = input("Enter start date (YYYY-MM-DD): ")
+    end_date = sys.argv[3]
+    print(stocks, start_date, end_date)
+    # end_date = input("Enter end date (YYYY-MM-DD): ")
 
     # with pd.ExcelWriter("stock_predictions.xlsx", engine='xlsxwriter') as writer:
     for stock_symbol in stocks:
@@ -164,7 +167,7 @@ if __name__ == "__main__":
         make_trading_decision(df, window_size, short_term_period)
         df = df.dropna()
 
-        features = ['Open', 'High', 'Low', 'Adj Close', 'Volume', 'SMA', 'MACD', 'Daily_Return']
+        features = ['Open', 'High', 'Low', 'Adj Close']
         target_variable = ['Close', 'Signal']
         X = df[features]
         y = df[target_variable]
@@ -190,18 +193,18 @@ if __name__ == "__main__":
         y_test = y_test[1:]
         X_test = X_test[:-1]  
 
-        # model = Sequential()
-        # model.add(Dense(128, activation='relu', input_shape=(X_train.shape[1],)))
-        # model.add(Dense(256, activation='relu'))
-        # model.add(Dense(128, activation='relu'))
-        # model.add(Dense(64, activation='relu'))
-        # model.add(Dense(1, activation='linear'))
-        # model.compile(optimizer='adam', loss='mean_absolute_error')
-        # model.fit(X_train, y_train['Close'], epochs=300, batch_size=64)
-        # predicted_close_nn = model.predict(X_test).flatten()
-        # nn_model_filename = f"{stock_symbol}_neural_network_model.pkl"
+        model = Sequential()
+        model.add(Dense(128, activation='relu', input_shape=(X_train.shape[1],)))
+        model.add(Dense(256, activation='relu'))
+        model.add(Dense(128, activation='relu'))
+        model.add(Dense(64, activation='relu'))
+        model.add(Dense(1, activation='linear'))
+        model.compile(optimizer='adam', loss='mean_absolute_error')
+        model.fit(X_train, y_train['Close'], epochs=100, batch_size=64)
+        predicted_close_nn = model.predict(X_test).flatten()
+        nn_model_filename = f"{stock_symbol}_neural_network_model.pkl"
         # joblib.dump(model, nn_model_filename)
-        # mae_nn = mean_absolute_error(y_test['Close'], predicted_close_nn)
+        mae_nn = mean_absolute_error(y_test['Close'], predicted_close_nn)
 
         
 
@@ -209,7 +212,7 @@ if __name__ == "__main__":
         lr_model.fit(X_train, y_train['Close'])
         y_pred_lr = lr_model.predict(X_test)
         lr_model_filename = f"{stock_symbol}_linear_regression_model.pkl"
-        joblib.dump(lr_model, lr_model_filename)
+        # joblib.dump(lr_model, lr_model_filename)
         mae_lr = mean_absolute_error(y_test['Close'], y_pred_lr)
         print(len(y_test['Close']), len(y_pred_lr))
 
@@ -217,18 +220,18 @@ if __name__ == "__main__":
         rf_model.fit(X_train,y_train['Close'])
         y_pred_rf = rf_model.predict(X_test)
         rf_model_filename = f"{stock_symbol}_random_forest_model.pkl"
-        joblib.dump(rf_model, rf_model_filename)
+        # joblib.dump(rf_model, rf_model_filename)
         mae_rf = mean_absolute_error(y_test['Close'], y_pred_rf)
 
         gb_model = GradientBoostingRegressor()
         gb_model.fit(X_train, y_train['Close'])
         y_pred_gb = gb_model.predict(X_test)
         gb_model_filename = f"{stock_symbol}_gradient_boost.pkl"
-        joblib.dump(gb_model, gb_model_filename)
+        # joblib.dump(gb_model, gb_model_filename)
         mae_gb = mean_absolute_error(y_test['Close'], y_pred_gb)
 
         print(f"Stock: {stock_symbol}")
-        # print("Mean absolute error neural network: ", mae_nn)
+        print("Mean absolute error neural network: ", mae_nn)
         print("Mean absolute error linear regression: ", mae_lr)
         print("Mean absolute error Random Forest: ", mae_rf)
         print("Mean absolute error Gradient Boosting Regressor: ", mae_gb)
@@ -237,7 +240,7 @@ if __name__ == "__main__":
         results_df = pd.DataFrame({
             "Date": y_test['Date'],
             "Actual_Close": y_test['Close'],
-            # "Predicted_Close_NN": predicted_close_nn,
+            "Predicted_Close_NN": predicted_close_nn,
             "Predicted_Close_LR": y_pred_lr,
             "Predicted_Close_RF": y_pred_rf,
             "Predicted_Close_GB": y_pred_gb
@@ -247,7 +250,7 @@ if __name__ == "__main__":
             "Stock": [stock_symbol] * len(y_test['Close']),
             "Date": y_test['Date'],
             "Actual_Close": y_test['Close'],
-            # "Predicted_Close_NN": predicted_close_nn,
+            "Predicted_Close_NN": predicted_close_nn,
             "Predicted_Close_LR": y_pred_lr,
             "Predicted_Close_RF": y_pred_rf,
             "Predicted_Close_GB": y_pred_gb
@@ -255,7 +258,7 @@ if __name__ == "__main__":
 
         results_df = pd.concat([results_df, stock_results], ignore_index=True)
         stock_data = results_df[results_df['Stock'] == stock_symbol]
-        stock_data.to_csv(f"{stock_symbol}_stock_data.csv", index=False)
+        stock_data.to_csv(f"output/{stock_symbol}.csv", index=False)
 
 
         # while True:
