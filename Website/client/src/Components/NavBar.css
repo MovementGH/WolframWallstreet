@@ -1,0 +1,26 @@
+.tape-bg {
+    background: url('../Assets/tape.jpg') repeat-x;
+    animation: slide 30s linear infinite;
+}
+.tape-cover-left {
+    background: linear-gradient(to right, rgba(0,0,0, 1) 0%, rgba(0,0,0,.6) 50%,rgba(0, 0, 0, 0) 100%);
+    padding-right: 10em;
+    width: 50%;
+    height: 100%;
+}
+.tape-cover-right {
+
+    background: linear-gradient(to left, rgba(0,0,0, 1) 0%, rgba(0,0,0,.6) 50%,rgba(0, 0, 0, 0) 100%);
+    padding-left: 10em;
+    height: 100%;
+    width: 50%;
+    justify-content: right;
+}
+@keyframes slide {
+    0% {
+      background-position: 0px 0px;
+    }
+    100% {
+      background-position: -1844px 0px; /* The image width */
+    }
+}
